@@ -5,8 +5,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef enum {
+typedef enum Token {
   IDENT,
+  OPEN_PAREN,
+  CLOSE_PAREN,
+  SEMICOLON,
   END_OF_FILE,
 } Token;
 
@@ -20,5 +23,6 @@ typedef struct Compiler {
 
 Compiler *set_up_comp();
 void comp_end(Compiler *comp);
+const char *tok_to_string(Compiler *comp, Token t);
 
 #endif

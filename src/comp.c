@@ -26,3 +26,20 @@ void comp_end(Compiler *comp) {
     free(comp->src);
     free(comp);
 }
+
+const char *tok_to_string(Compiler *comp, Token t) {
+  switch (t) {
+    case IDENT:
+      return comp->cur_word;
+    case OPEN_PAREN:
+      return "(";
+    case CLOSE_PAREN:
+      return ")";
+    case SEMICOLON:
+      return ";";
+    case END_OF_FILE:
+      return "end of file";
+    default:
+      return "TODO";
+  }
+}

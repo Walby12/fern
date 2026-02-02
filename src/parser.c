@@ -2,13 +2,40 @@
 #include "comp.h"
 #include "lexer.h"
 
+#include <string.h>
+
+void parse_expect(Compiler *comp, Token t) {
+  lexe(comp);
+  if (comp->cur_tok != t) {
+    printf("ERROR at line %zu: Expected '%s' but got '%s'\n", comp->line, tok_to_string(comp, t), tok_to_string(comp, comp->cur_tok));
+    exit(1);
+  }
+}
+
 void parse(Compiler *comp) {
   lexe(comp);
   while (comp->cur_tok != END_OF_FILE) {
-    if (comp->cur_tok == IDENT) {
-      printf("IDENT: %s\n", comp->cur_word);
-    }
+    parse_expr(comp);
     lexe(comp);
   }
   printf("Reached end of file\n");
+}
+
+void parse_expr(Compiler *comp) {
+  switch (comp->cur_tok) {
+    case IDENT:
+      if (strcmp(comp->cur_word, "print") == 0) {
+        parse_expect(comp, OPEN_PAREN);
+        parse_expect(comp, CLOSE_PAREN);
+        parse_expect(comp, SEMICOLON);
+        printf("CORRECT PRINT STMT\n");
+      } else {
+        printf("ERROR at line %zu: Unknow stmt '%s'\n", comp->line, comp->cur_word);
+        exit(1);
+      }
+      break;
+    default:
+      printf("TODO");
+      exit(0);
+  }
 }
