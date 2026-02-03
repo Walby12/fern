@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "comp.h"
 #include "lexer.h"
+#include "vm.h"
 
 #include <string.h>
 
@@ -18,7 +19,7 @@ void parse(Compiler *comp) {
     parse_expr(comp);
     lexe(comp);
   }
-  printf("Reached end of file\n");
+  printf("Finished producing ir\n");
 }
 
 void parse_expr(Compiler *comp) {
@@ -28,14 +29,14 @@ void parse_expr(Compiler *comp) {
         parse_expect(comp, OPEN_PAREN);
         parse_expect(comp, CLOSE_PAREN);
         parse_expect(comp, SEMICOLON);
-        printf("CORRECT PRINT STMT\n");
+        vm_print_stmt(comp);
       } else {
         printf("ERROR at line %zu: Unknow stmt '%s'\n", comp->line, comp->cur_word);
         exit(1);
       }
       break;
     default:
-      printf("TODO");
-      exit(0);
+      printf("ERROR at line %zu: Unknow stmt '%s'\n", comp->line, tok_to_string(comp, comp->cur_tok));
+      exit(1);
   }
 }

@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Compiler *set_up_comp() {
+Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
     Compiler *comp = malloc(sizeof(Compiler));
-    FILE *f = fopen("test.fern", "rb");
+    comp->in_file_name = in_file_name;
+    comp->out_file_name = out_file_name;
+    FILE *f = fopen(comp->in_file_name, "rb");
     if (!f) return NULL;
 
     fseek(f, 0, SEEK_END);

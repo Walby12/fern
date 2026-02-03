@@ -19,9 +19,11 @@ typedef struct Compiler {
   const char *cur_word;
   size_t index;
   size_t line;
+  const char *in_file_name;
+  const char *out_file_name;
 } Compiler;
 
-Compiler *set_up_comp();
+Compiler *set_up_comp(const char *in_file_name, const char *out_file_name);
 void comp_end(Compiler *comp);
 const char *tok_to_string(Compiler *comp, Token t);
 
