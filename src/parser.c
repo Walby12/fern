@@ -1,7 +1,7 @@
 #include "parser.h"
 #include "comp.h"
 #include "lexer.h"
-#include "vm.h"
+#include "ir_builder.h"
 
 #include <string.h>
 

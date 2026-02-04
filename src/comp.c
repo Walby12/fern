@@ -21,7 +21,10 @@ Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
     }
     
     FILE *f = fopen(comp->in_file_name, "rb");
-    if (!f) return NULL;
+    if (f == NULL) {
+      printf("ERROR: Could not open file: %s\n", comp->in_file_name);
+      exit(1);
+    } 
 
     fseek(f, 0, SEEK_END);
     long fsize = ftell(f);

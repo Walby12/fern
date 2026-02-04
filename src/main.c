@@ -2,6 +2,7 @@
 #include "comp.h"
 #include "parser.h"
 #include "argparse.h"
+#include "vm.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -72,7 +73,11 @@ int main(int argc, const char **argv) {
   Compiler *comp = set_up_comp(argv[0], out_file_name);
   parse(comp);
   comp_end(comp);
-  free(out_file_name); 
+
+  Vm *vm = init_vm(out_file_name);
+  
+  free(out_file_name);
+  vm_end(vm);
     
   return 0;
 }
