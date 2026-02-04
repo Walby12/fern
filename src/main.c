@@ -41,14 +41,13 @@ int main(int argc, const char **argv) {
   struct argparse_option options[] = {
     OPT_HELP(),
     OPT_GROUP("Basic options"),
-    OPT_STRING('o', "output", &output, "output file", NULL, 0, 0),
     OPT_END(),
   };
 
 
   struct argparse argparse;
   argparse_init(&argparse, options, usage, 0);
-  argparse_describe(&argparse, "\nFern: A tiny VM and compiler project.", "\nAdditional info can go here.");
+  argparse_describe(&argparse, "\nFern: A tiny interpreter.", "\nNOTE: the project is in early development.");
   argc = argparse_parse(&argparse, argc, argv); 
   
   if (argc < 1) {

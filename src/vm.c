@@ -4,5 +4,5 @@
 #include <stdio.h>
 
 void vm_print_stmt(Compiler *comp) {
-  printf("NICE PRINT STMT\n");
+  fprintf(comp->ir_file, "NICE PRINT STMT\n");
 }

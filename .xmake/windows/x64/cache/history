@@ -1,0 +1,14 @@
+{
+    cmdlines = {
+        [[xmake lua "C:\\Program Files\\xmake\\modules\\private\\utils\\statistics.lua"]],
+        [[xmake lua "C:\\Program Files\\xmake\\actions\\build\\cleaner.lua"]],
+        "xmake c",
+        "xmake ",
+        "xmake ",
+        "xmake ",
+        "xmake ",
+        "xmake ",
+        "xmake ",
+        "xmake "
+    }
+}

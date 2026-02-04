@@ -6,7 +6,20 @@
 Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
     Compiler *comp = malloc(sizeof(Compiler));
     comp->in_file_name = in_file_name;
-    comp->out_file_name = out_file_name;
+    comp->ir_file = fopen(out_file_name, "w");
+    if (comp->ir_file == NULL) {
+      printf("ERROR: Failed to create: %s\n", out_file_name);
+      exit(1);
+    }
+    fprintf(comp->ir_file, "\n");
+    fclose(comp->ir_file);
+
+    comp->ir_file = fopen(out_file_name, "a");
+    if (comp->ir_file == NULL) {
+      printf("ERROR: Failed to create file: %s\n", out_file_name);
+      exit(1);
+    }
+    
     FILE *f = fopen(comp->in_file_name, "rb");
     if (!f) return NULL;
 
@@ -25,6 +38,7 @@ Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
 }
 
 void comp_end(Compiler *comp) {
+    fclose(comp->ir_file);
     free(comp->src);
     free(comp);
 }

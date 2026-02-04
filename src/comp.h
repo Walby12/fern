@@ -20,7 +20,7 @@ typedef struct Compiler {
   size_t index;
   size_t line;
   const char *in_file_name;
-  const char *out_file_name;
+  FILE *ir_file;
 } Compiler;
 
 Compiler *set_up_comp(const char *in_file_name, const char *out_file_name);

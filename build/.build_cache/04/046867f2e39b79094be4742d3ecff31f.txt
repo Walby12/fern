@@ -1,0 +1,9 @@
+{
+    errdata = "\27[01m\27[Ksrc\\vm.c:\27[m\27[K In function '\27[01m\27[Kvm_print_stmt\27[m\27[K':\
+\27[01m\27[Ksrc\\vm.c:6:30:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kunused parameter '\27[01m\27[Kcomp\27[m\27[K' [\27[01;35m\27[K-Wunused-parameter\27[m\27[K]\
+    6 | void vm_print_stmt(\27[01;35m\27[KCompiler *comp\27[m\27[K) {\
+      |                    \27[01;35m\27[K~~~~~~~~~~^~~~\27[m\27[K\
+At top level:\
+\27[01m\27[Kcc1.exe:\27[m\27[K \27[01;36m\27[Knote: \27[m\27[Kunrecognized command-line option '\27[01m\27[K-Wno-gnu-line-marker\27[m\27[K' may have been intended to silence earlier diagnostics\
+"
+}
