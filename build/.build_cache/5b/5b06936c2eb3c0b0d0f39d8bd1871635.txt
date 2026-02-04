@@ -1,9 +1,0 @@
-{
-    errdata = "\27[01m\27[Ksrc\\comp.c:\27[m\27[K In function '\27[01m\27[Kset_up_comp\27[m\27[K':\
-\27[01m\27[Ksrc\\comp.c:14:28:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kzero-length gnu_printf format string [\27[01;35m\27[K-Wformat-zero-length\27[m\27[K]\
-   14 |     fprintf(comp->ir_file, \27[01;35m\27[K\"\"\27[m\27[K);\
-      |                            \27[01;35m\27[K^~\27[m\27[K\
-At top level:\
-\27[01m\27[Kcc1.exe:\27[m\27[K \27[01;36m\27[Knote: \27[m\27[Kunrecognized command-line option '\27[01m\27[K-Wno-gnu-line-marker\27[m\27[K' may have been intended to silence earlier diagnostics\
-"
-}
