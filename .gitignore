@@ -3,3 +3,7 @@
 *.fern
 
 *.ir
+
+/build/
+
+/.xmake/
