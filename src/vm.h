@@ -3,13 +3,7 @@
 
 #include <stddef.h>
 
-typedef enum VmTok {
-  VM_IDENT,
-  VM_END_OF_FILE,
-} VmTok;
-
 typedef struct Vm {
-  VmTok cur_tok;
   char *src;
   size_t index;
   const char *cur_word; 
@@ -17,5 +11,7 @@ typedef struct Vm {
 
 Vm *init_vm(const char *file_name);
 void vm_end(Vm *vm);
+void vm_parse(Vm *vm);
+void vm_parse_func_call(Vm *vm);
 
 #endif

@@ -77,6 +77,8 @@ int main(int argc, const char **argv) {
   Vm *vm = init_vm(out_file_name);
   
   free(out_file_name);
+  
+  vm_parse(vm);
   vm_end(vm);
     
   return 0;

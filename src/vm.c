@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 Vm *init_vm(const char *file_name) {
     Vm *vm = malloc(sizeof(Vm));
@@ -30,4 +31,29 @@ Vm *init_vm(const char *file_name) {
 void vm_end(Vm *vm) {
     free(vm->src);
     free(vm);
+}
+
+void vm_parse(Vm *vm) {
+    char *token = strtok(vm->src, " ");
+
+    while (token != NULL) {
+        if (strcmp(token, "func_call") == 0) {
+            vm_parse_func_call(vm);
+        } else {
+            printf("ERROR: Unknow stmt in ir: '%s'\n", token);
+        }
+        token = strtok(NULL, " ");
+    }
+    printf("Finished interpreting ir\n");
+}
+
+void vm_parse_func_call(Vm *vm) {
+    char *arg = strtok(NULL, " ");
+
+    if (arg != NULL) {
+        printf("CALLING FUNCTION: %s\n", arg);
+    } else {
+        printf("ERROR: func_call must take an arg\n");
+        exit(1);
+    }
 }

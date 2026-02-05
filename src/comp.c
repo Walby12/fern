@@ -11,7 +11,7 @@ Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
       printf("ERROR: Failed to create: %s\n", out_file_name);
       exit(1);
     }
-    fprintf(comp->ir_file, "\n");
+    fprintf(comp->ir_file, "");
     fclose(comp->ir_file);
 
     comp->ir_file = fopen(out_file_name, "a");
