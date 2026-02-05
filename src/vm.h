@@ -9,9 +9,11 @@ typedef struct Vm {
   const char *cur_word; 
 } Vm;
 
+void trim(char *str);
 Vm *init_vm(const char *file_name);
 void vm_end(Vm *vm);
 void vm_parse(Vm *vm);
-void vm_parse_func_call(Vm *vm);
+void vm_parse_func_call();
+void vm_parse_print();
 
 #endif

@@ -3,6 +3,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+
+void trim(char *str) {
+    if (str == NULL) return;
+
+    char *start = str;
+    while (isspace((unsigned char)*start)) {
+        start++;
+    }
+
+    char *end = start + strlen(start) - 1;
+    while (end > start && isspace((unsigned char)*end)) {
+        end--;
+    }
+
+   *(end + 1) = '\0';
+
+    if (start != str) {
+        memmove(str, start, strlen(start) + 1);
+    }
+}
 
 Vm *init_vm(const char *file_name) {
     Vm *vm = malloc(sizeof(Vm));
@@ -37,8 +58,9 @@ void vm_parse(Vm *vm) {
     char *token = strtok(vm->src, " ");
 
     while (token != NULL) {
+        trim(token);
         if (strcmp(token, "func_call") == 0) {
-            vm_parse_func_call(vm);
+            vm_parse_func_call();
         } else {
             printf("ERROR: Unknow stmt in ir: '%s'\n", token);
         }
@@ -47,13 +69,22 @@ void vm_parse(Vm *vm) {
     printf("Finished interpreting ir\n");
 }
 
-void vm_parse_func_call(Vm *vm) {
+void vm_parse_func_call() {
     char *arg = strtok(NULL, " ");
 
     if (arg != NULL) {
-        printf("CALLING FUNCTION: %s\n", arg);
+        trim(arg);
+        if (strcmp(arg, "print") == 0) {
+            vm_parse_print();
+        } else {
+            printf("ERROR: Unknow func_call arg: '%s'\n", arg);
+        }
     } else {
         printf("ERROR: func_call must take an arg\n");
         exit(1);
     }
+}
+
+void vm_parse_print() {
+    printf("Hello world\n");
 }
