@@ -8,7 +8,7 @@
 void parse_expect(Compiler *comp, Token t) {
   lexe(comp);
   if (comp->cur_tok != t) {
-    printf("ERROR at line %zu: Expected '%s' but got '%s'\n", comp->line, tok_to_string(comp, t), tok_to_string(comp, comp->cur_tok));
+    printf("ERROR at line %zu: Expected %s but got %s\n", comp->line, tok_to_string_case_2(t), tok_to_string_case_1(comp, comp->cur_tok));
     exit(1);
   }
 }
@@ -27,16 +27,17 @@ void parse_expr(Compiler *comp) {
     case IDENT:
       if (strcmp(comp->cur_word, "print") == 0) {
         parse_expect(comp, OPEN_PAREN);
+        parse_expect(comp, STRING);
         parse_expect(comp, CLOSE_PAREN);
         parse_expect(comp, SEMICOLON);
-        vm_print_stmt(comp);
+        ir_print_stmt(comp);
       } else {
-        printf("ERROR at line %zu: Unknow stmt '%s'\n", comp->line, comp->cur_word);
+        printf("ERROR at line %zu: Invalid stmt '%s'\n", comp->line, comp->cur_word);
         exit(1);
       }
       break;
     default:
-      printf("ERROR at line %zu: Unknow stmt '%s'\n", comp->line, tok_to_string(comp, comp->cur_tok));
+      printf("ERROR at line %zu: Invalid stmt %s\n", comp->line, tok_to_string_case_1(comp, comp->cur_tok));
       exit(1);
   }
 }

@@ -3,6 +3,6 @@
 
 typedef struct Compiler Compiler;
 
-void vm_print_stmt(Compiler *comp);
+void ir_print_stmt(Compiler *comp);
 
 #endif

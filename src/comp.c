@@ -46,16 +46,41 @@ void comp_end(Compiler *comp) {
     free(comp);
 }
 
-const char *tok_to_string(Compiler *comp, Token t) {
+const char *tok_to_string_case_1(Compiler *comp, Token t) {
+  static char buffer[256];
+    
   switch (t) {
     case IDENT:
-      return comp->cur_word;
+      snprintf(buffer, sizeof(buffer), "identifier %s", comp->cur_word);
+      return buffer;
     case OPEN_PAREN:
-      return "(";
+      return "'('";
     case CLOSE_PAREN:
-      return ")";
+      return "')'";
     case SEMICOLON:
-      return ";";
+      return "';'";
+    case STRING:
+      snprintf(buffer, sizeof(buffer), "string %s", comp->cur_word);
+      return buffer;
+    case END_OF_FILE:
+      return "end of file";
+    default:
+      return "TODO";
+  }
+}
+
+const char *tok_to_string_case_2(Token t) {
+  switch (t) {
+    case IDENT:
+      return "an identifier";
+    case OPEN_PAREN:
+      return "'(''";
+    case CLOSE_PAREN:
+      return "')'";
+    case SEMICOLON:
+      return "';'";
+    case STRING:
+      return "a string";
     case END_OF_FILE:
       return "end of file";
     default:

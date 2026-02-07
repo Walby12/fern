@@ -54,28 +54,81 @@ void vm_end(Vm *vm) {
     free(vm);
 }
 
+char* vm_get_next_tok(char **cursor) {
+    char *start = *cursor;
+    
+    while (**cursor && isspace(**cursor)) (*cursor)++;
+    
+    if (**cursor == '\0') return NULL;
+    start = *cursor;
+    
+    if (**cursor == '"') {
+        (*cursor)++;
+        start = *cursor;
+        
+        while (**cursor && **cursor != '"') {
+            (*cursor)++;
+        }
+        
+        if (**cursor == '"') {
+            **cursor = '\0';
+            (*cursor)++;
+        }
+    } else {
+        while (**cursor && !isspace(**cursor)) {
+            (*cursor)++;
+        }
+        
+        if (**cursor != '\0') {
+            **cursor = '\0';
+            (*cursor)++;
+        }
+    }
+    
+    return start;
+}
+
+void unescape_str(char *str) {
+    char *src = str;
+    char *dst = str;
+
+    while (*src) {
+        if (*src == '\\' && *(src + 1) == 'n') {
+            *dst = '\n';
+            src += 2;
+        } else if (*src == '\\' && *(src + 1) == '\\') {
+            *dst = '\\';
+            src += 2;
+        } else {
+            *dst = *src;
+            src++;
+        }
+        dst++;
+    }
+    *dst = '\0';
+}
+
 void vm_parse(Vm *vm) {
-    char *token = strtok(vm->src, " ");
+    char *cursor = vm->src;
+    char *token = vm_get_next_tok(&cursor);
 
     while (token != NULL) {
-        trim(token);
         if (strcmp(token, "func_call") == 0) {
-            vm_parse_func_call();
+            vm_parse_func_call(&cursor);
         } else {
             printf("ERROR: Unknow stmt in ir: '%s'\n", token);
         }
-        token = strtok(NULL, " ");
+        token = vm_get_next_tok(&cursor);
     }
     printf("Finished interpreting ir\n");
 }
 
-void vm_parse_func_call() {
-    char *arg = strtok(NULL, " ");
+void vm_parse_func_call(char **cursor) {
+    char *arg = vm_get_next_tok(cursor);
 
     if (arg != NULL) {
-        trim(arg);
         if (strcmp(arg, "print") == 0) {
-            vm_parse_print();
+            vm_parse_print(cursor);
         } else {
             printf("ERROR: Unknow func_call arg: '%s'\n", arg);
         }
@@ -85,6 +138,8 @@ void vm_parse_func_call() {
     }
 }
 
-void vm_parse_print() {
-    printf("Hello world\n");
+void vm_parse_print(char **cursor) {
+    char *arg = vm_get_next_tok(cursor);
+    unescape_str(arg);
+    printf("%s", arg);
 }
