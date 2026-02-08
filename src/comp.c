@@ -1,7 +1,10 @@
 #include "comp.h"
+#include "vars.h"
 
 #include <stdlib.h>
 #include <stdio.h>
+
+int verbose = 0;
 
 Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
     Compiler *comp = malloc(sizeof(Compiler));
@@ -37,10 +40,13 @@ Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
     fclose(f);
     comp->index = 0;
     comp->line = 1;
+
+    comp->st = sym_table_create();
     return comp;
 }
 
 void comp_end(Compiler *comp) {
+    destroy_sym_table(comp->st);
     fclose(comp->ir_file);
     free(comp->src);
     free(comp);

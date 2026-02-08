@@ -2,6 +2,7 @@
 #include "comp.h"
 #include "lexer.h"
 #include "ir_builder.h"
+#include "vars.h"
 
 #include <string.h>
 
@@ -19,7 +20,8 @@ void parse(Compiler *comp) {
     parse_expr(comp);
     lexe(comp);
   }
-  printf("Finished producing ir\n");
+  
+  if (verbose) printf("Finished producing ir\n\n");
 }
 
 void parse_expr(Compiler *comp) {
@@ -29,12 +31,26 @@ void parse_expr(Compiler *comp) {
         parse_expect(comp, OPEN_PAREN);
         parse_expect(comp, STRING);
         parse_expect(comp, CLOSE_PAREN);
-        parse_expect(comp, SEMICOLON);
         ir_print_stmt(comp);
-      } else {
+      } else if (strcmp(comp->cur_word, "let") == 0) {
+        parse_expect(comp, IDENT);
+        char *var_name = strdup(comp->cur_word);
+
+        parse_expect(comp, EQUALS);
+        parse_expect(comp, STRING);
+
+        Var *var = malloc(sizeof(Var));
+        var->type = VAR_STRING;
+        var->scope_level = 1;
+        var->as.string = strdup(comp->cur_word);
+
+        set_var(comp->st, var_name, var);
+        ir_let_stmt(comp, var_name);
+        } else {
         printf("ERROR at line %zu: Invalid stmt '%s'\n", comp->line, comp->cur_word);
         exit(1);
       }
+      parse_expect(comp, SEMICOLON);
       break;
     default:
       printf("ERROR at line %zu: Invalid stmt %s\n", comp->line, tok_to_string_case_1(comp, comp->cur_tok));

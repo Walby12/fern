@@ -44,6 +44,10 @@ void lexe(Compiler *comp) {
             comp->cur_tok = STRING;
             comp->index++;
             break;
+        case '=':
+            comp->cur_tok = EQUALS;
+            comp->index++;
+            break;
         default:
             if (isalpha((unsigned char)comp->src[comp->index])) {
                 char buff[1024];

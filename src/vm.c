@@ -1,4 +1,5 @@
 #include "vm.h"
+#include "comp.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -120,7 +121,7 @@ void vm_parse(Vm *vm) {
         }
         token = vm_get_next_tok(&cursor);
     }
-    printf("Finished interpreting ir\n");
+    if (verbose) printf("\nFinished interpreting ir\n");
 }
 
 void vm_parse_func_call(char **cursor) {

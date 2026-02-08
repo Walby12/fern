@@ -5,11 +5,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern int verbose;
+
+typedef struct SymbolTable SymbolTable;
+
 typedef enum Token {
   IDENT,
   OPEN_PAREN,
   CLOSE_PAREN,
   SEMICOLON,
+  EQUALS,
   STRING,
   END_OF_FILE,
 } Token;
@@ -22,6 +27,7 @@ typedef struct Compiler {
   size_t line;
   const char *in_file_name;
   FILE *ir_file;
+  SymbolTable *st;
 } Compiler;
 
 Compiler *set_up_comp(const char *in_file_name, const char *out_file_name);

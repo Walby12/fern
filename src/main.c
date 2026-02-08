@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "argparse.h"
 #include "vm.h"
+#include "vars.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -36,12 +37,10 @@ char *replace_extension(const char *filename, const char *new_ext) {
 }
 
 int main(int argc, const char **argv) {
-  const char *output = NULL;
-
-
   struct argparse_option options[] = {
     OPT_HELP(),
     OPT_GROUP("Basic options"),
+    OPT_BOOLEAN('v', "verbose", &verbose, "verbose option", NULL, 0, 0),
     OPT_END(),
   };
 
@@ -60,15 +59,12 @@ int main(int argc, const char **argv) {
     printf("ERROR: file '%s' must end with '.fern'\n", argv[0]);
     return 1;
   }
+    
+  char *out_file_name = replace_extension(argv[0], "ir");
 
-  char *out_file_name;
-  if (output) {
-    out_file_name = strdup(output);
-  } else {
-    out_file_name = replace_extension(argv[0], "ir");
-  }
-
-  printf("Compiling: %s -> %s\n", argv[0], out_file_name);
+  if (verbose) printf("INFO: Verbose mode on\n\n");
+  
+  if (verbose) printf("Compiling: %s -> %s\n", argv[0], out_file_name);
     
   Compiler *comp = set_up_comp(argv[0], out_file_name);
   parse(comp);
