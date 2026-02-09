@@ -68,14 +68,16 @@ int main(int argc, const char **argv) {
     
   Compiler *comp = set_up_comp(argv[0], out_file_name);
   parse(comp);
+  SymbolTable *st = comp->st;
   comp_end(comp);
-
+  
   Vm *vm = init_vm(out_file_name);
   
   free(out_file_name);
   
-  vm_parse(vm);
+  vm_parse(vm, st);
   vm_end(vm);
-    
+  destroy_sym_table(st);
+
   return 0;
 }

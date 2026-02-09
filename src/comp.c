@@ -46,7 +46,6 @@ Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
 }
 
 void comp_end(Compiler *comp) {
-    destroy_sym_table(comp->st);
     fclose(comp->ir_file);
     free(comp->src);
     free(comp);

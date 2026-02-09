@@ -6,6 +6,11 @@
 
 #include <string.h>
 
+Token parse_get_next_tok(Compiler *comp) {
+  lexe(comp);
+  return comp->cur_tok;
+}
+
 void parse_expect(Compiler *comp, Token t) {
   lexe(comp);
   if (comp->cur_tok != t) {
@@ -28,10 +33,25 @@ void parse_expr(Compiler *comp) {
   switch (comp->cur_tok) {
     case IDENT:
       if (strcmp(comp->cur_word, "print") == 0) {
+        
         parse_expect(comp, OPEN_PAREN);
-        parse_expect(comp, STRING);
-        parse_expect(comp, CLOSE_PAREN);
-        ir_print_stmt(comp);
+        Token t = parse_get_next_tok(comp);
+        if (t == IDENT) {
+          Var *found = get_var(comp->st, comp->cur_word);
+
+          if (!found) {
+            printf("ERROR at line %zu: Unknow variable: %s\n", comp->line, comp->cur_word);
+            exit(1);
+          }
+          parse_expect(comp, CLOSE_PAREN);
+          ir_print_stmt(comp, comp->cur_word, 0);
+        } else if (t != STRING) {
+          printf("ERROR at line %zu: Expected a string or a str var but got: %s\n", comp->line, tok_to_string_case_1(comp, comp->cur_tok));
+          exit(1);
+        } else {
+          parse_expect(comp, CLOSE_PAREN);
+          ir_print_stmt(comp, comp->cur_word, 1); 
+        }
       } else if (strcmp(comp->cur_word, "let") == 0) {
         parse_expect(comp, IDENT);
         char *var_name = strdup(comp->cur_word);

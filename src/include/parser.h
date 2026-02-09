@@ -7,5 +7,6 @@ typedef enum Token Token;
 void parse(Compiler *comp);
 void parse_expr(Compiler *comp);
 void parse_expect(Compiler *comp, Token t);
+Token parse_get_next_tok(Compiler *comp);
 
 #endif

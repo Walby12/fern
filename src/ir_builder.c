@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 
-void ir_print_stmt(Compiler *comp) {
-    fprintf(comp->ir_file, "func_call print \"%s\"\n", comp->cur_word);
+void ir_print_stmt(Compiler *comp, const char *arg, int c) {
+    if (c != 0) fprintf(comp->ir_file, "func_call print \"%s\"\n", arg);
+    else fprintf(comp->ir_file, "func_call print %s\n", arg);
 }
 
 void ir_let_stmt(Compiler *comp, char *var_name) {
