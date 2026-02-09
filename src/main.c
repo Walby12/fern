@@ -37,10 +37,13 @@ char *replace_extension(const char *filename, const char *new_ext) {
 }
 
 int main(int argc, const char **argv) {
+  int version;
+  
   struct argparse_option options[] = {
     OPT_HELP(),
     OPT_GROUP("Basic options"),
     OPT_BOOLEAN('v', "verbose", &verbose, "verbose option", NULL, 0, 0),
+    OPT_BOOLEAN('V', "version", &version, "print the version", NULL, 0, 0),
     OPT_END(),
   };
 
@@ -62,6 +65,8 @@ int main(int argc, const char **argv) {
     
   char *out_file_name = replace_extension(argv[0], "ir");
 
+  if (version) printf("fern version 0.1\n");
+  
   if (verbose) printf("INFO: Verbose mode on\n\n");
   
   if (verbose) printf("Compiling: %s -> %s\n", argv[0], out_file_name);

@@ -169,21 +169,15 @@ void vm_parse_bind(char **cursor, SymbolTable *st) {
     char *name = vm_get_next_tok(cursor);
     char *val = vm_get_next_tok(cursor);
 
-    if (!name || !val) return;
+    if (!name || !val) exit(1);
 
-    unescape_str(val); // Clean up the \n etc.
+    unescape_str(val);
     
     Var *found = get_var(st, name);
 
     if (!found) {
-        printf("ERROR: Var %s not found in Symbol Table\n", name);
+        printf("RUNTIME ERROR: Var %s not found in Symbol Table\n", name);
         exit(1);
     }
-
-    // --- THE CRASH PROTECTION ---
-    // If your compiler didn't initialize this to NULL, free() will segfault.
-    // Ensure your compiler's set_up_var function sets .as.string = NULL;
-    
-    // found->as.string = val; // <--- DANGEROUS: Do not do this.
-    found->as.string = strdup(val); // <--- SAFE: Allocates new memory.
+    found->as.string = strdup(val);
 }
