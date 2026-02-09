@@ -11,3 +11,10 @@ To build and run **fern**, you need:
 
 1.  **C Compiler:** `gcc`.
 2.  **Xmake:** For building the project.
+
+## Quickstart
+
+```console
+$ xmake
+$ ./bin/fern.exe --help
+```
