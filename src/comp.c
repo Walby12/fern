@@ -14,7 +14,6 @@ Compiler *set_up_comp(const char *in_file_name, const char *out_file_name) {
       printf("ERROR: Failed to create: %s\n", out_file_name);
       exit(1);
     }
-    fprintf(comp->ir_file, "");
     fclose(comp->ir_file);
 
     comp->ir_file = fopen(out_file_name, "a");
@@ -56,7 +55,10 @@ const char *tok_to_string_case_1(Compiler *comp, Token t) {
     
   switch (t) {
     case IDENT:
-      snprintf(buffer, sizeof(buffer), "identifier %s", comp->cur_word);
+      snprintf(buffer, sizeof(buffer), "identifier %s", comp->vals.word);
+      return buffer;
+    case NUMBER:
+      snprintf(buffer, sizeof(buffer), "number %d", comp->vals.number);
       return buffer;
     case OPEN_PAREN:
       return "'('";
@@ -65,7 +67,7 @@ const char *tok_to_string_case_1(Compiler *comp, Token t) {
     case SEMICOLON:
       return "';'";
     case STRING:
-      snprintf(buffer, sizeof(buffer), "string %s", comp->cur_word);
+      snprintf(buffer, sizeof(buffer), "string %s", comp->vals.word);
       return buffer;
     case END_OF_FILE:
       return "end of file";
@@ -78,6 +80,8 @@ const char *tok_to_string_case_2(Token t) {
   switch (t) {
     case IDENT:
       return "an identifier";
+    case NUMBER:
+      return "a number";
     case OPEN_PAREN:
       return "'(''";
     case CLOSE_PAREN:

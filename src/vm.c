@@ -169,7 +169,10 @@ void vm_parse_bind(char **cursor, SymbolTable *st) {
     char *name = vm_get_next_tok(cursor);
     char *val = vm_get_next_tok(cursor);
 
-    if (!name || !val) exit(1);
+    if (!name || !val) {
+        printf("RUNTIME ERROR: bind must take two args\n");
+        exit(1);
+    }
 
     unescape_str(val);
     

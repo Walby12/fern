@@ -40,7 +40,7 @@ void lexe(Compiler *comp) {
             }
             buff[i] = '\0';
 
-            comp->cur_word = _strdup(buff);
+            comp->vals.word = strdup(buff);
             comp->cur_tok = STRING;
             comp->index++;
             break;
@@ -49,18 +49,30 @@ void lexe(Compiler *comp) {
             comp->index++;
             break;
         default:
-            if (isalpha((unsigned char)comp->src[comp->index])) {
+            if (isalpha((unsigned char) comp->src[comp->index])) {
                 char buff[1024];
                 size_t i = 0;
 
-                while (comp->index < strlen(comp->src) && !isspace((unsigned char)comp->src[comp->index]) &&
+                while (comp->index < strlen(comp->src) && !isspace((unsigned char) comp->src[comp->index]) &&
                        comp->src[comp->index] != ';' && comp->src[comp->index] != '(' && comp->src[comp->index] != ')') {
                     buff[i++] = comp->src[comp->index++];
                 }
                 buff[i] = '\0';
                            
-                comp->cur_word = _strdup(buff);
+                comp->vals.word = strdup(buff);
                 comp->cur_tok = IDENT;
+            } else if (isdigit((unsigned char) comp->src[comp->index])) {
+                char buff[1024];
+                size_t i = 0;
+
+                while (comp->index < strlen(comp->src) && !isspace((unsigned char) comp->src[comp->index]) &&
+                       comp->src[comp->index] != ';' && comp->src[comp->index] != '(' && comp->src[comp->index] != ')') {
+                    buff[i++] = comp->src[comp->index++];
+                }
+                buff[i] = '\0';
+                           
+                comp->vals.number = atoi(buff);
+                comp->cur_tok = IDENT;                
             } else {
                 printf("ERROR at line %zu: Invalid char '%c'\n", comp->line, comp->src[comp->index]);
                 exit(1);
