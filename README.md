@@ -22,10 +22,10 @@ A lightweight, high-performance interpreted programming language built from scra
 ### Build Modes
 ```bash
 # Debug build 
-xmake f -m debug && xmake
+xmake debug
 
 # Release build 
-xmake f -m release && xmake
+xmake release
 ```
 
 ## Architecture
@@ -41,4 +41,4 @@ Contributions are welcome! This is a learning project, so feel free to experimen
 
 ## License
 
-[Your chosen license - e.g., MIT]
+[MIT]
