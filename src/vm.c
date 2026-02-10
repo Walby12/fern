@@ -149,19 +149,14 @@ void vm_parse_print(char **cursor, SymbolTable *st) {
         printf("RUNTIME ERROR: print expects an arg\n");
         exit(1);
     }
-    
-    if (arg[0] == '"') {
+
+    Var *found = get_var(st, arg);
+
+    if (found) {
+        printf("%s", found->as.string);
+    } else {
         unescape_str(arg);
         printf("%s", arg);
-    } else {
-        Var *found = get_var(st, arg);
-
-        if (!found) {
-            printf("RUNTIME ERROR: Could not find var: %s, since it is not in the symbol table\n", arg);
-            exit(1);
-        }
-
-        printf("%s", found->as.string);
     }
 }
 
