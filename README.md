@@ -1,20 +1,44 @@
 # fern
- 
-**fern** is a lightweight, high-performance interpreted language.
+
+A lightweight, high-performance interpreted programming language built from scratch in C.
 
 > [!WARNING]  
-> **Status: Early Development.** fern is currently an experimental project. The internal architecture and API are subject to frequent, breaking changes.
+> **Early Development:** fern is an experimental project under active development. Expect breaking changes and incomplete features.
 
-## Prerequisites
+## Features
 
-To build and run **fern**, you need:
+-  **Simple syntax** - Easy to learn and read
+-  **Fast compilation** - Compiles to intermediate representation (IR)
 
-1.  **C Compiler:** `gcc`.
-2.  **Xmake:** For building the project.
 
-## Quickstart
+## Getting Started
 
-```console
-$ xmake
-$ ./bin/fern.exe --help
+### Prerequisites
+
+- **C Compiler:** GCC or Clang
+- **Build System:** [Xmake](https://xmake.io/)
+
+
+### Build Modes
+```bash
+# Debug build 
+xmake f -m debug && xmake
+
+# Release build 
+xmake f -m release && xmake
 ```
+
+## Architecture
+
+fern uses a two-stage compilation process:
+
+1. **Compiler** (`src/parser.c`, `src/lexer.c`) - Parses source code and generates IR
+2. **VM** (`src/vm.c`) - Interprets the IR and executes the program
+
+## Contributing
+
+Contributions are welcome! This is a learning project, so feel free to experiment and suggest improvements.
+
+## License
+
+[Your chosen license - e.g., MIT]
