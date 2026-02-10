@@ -42,3 +42,14 @@ void destroy_sym_table(SymbolTable *st) {
   kh_destroy(sym, st->hash_table);
   free(st);
 }
+
+const char *var_type_to_string(VarType t) {
+  switch (t) {
+    case VAR_STRING:
+      return "str";
+    case VAR_NUMBER:
+      return "int";
+    default:
+      return "TODO";
+  }
+}

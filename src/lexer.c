@@ -72,7 +72,7 @@ void lexe(Compiler *comp) {
                 buff[i] = '\0';
                            
                 comp->vals.number = atoi(buff);
-                comp->cur_tok = IDENT;                
+                comp->cur_tok = NUMBER;                
             } else {
                 printf("ERROR at line %zu: Invalid char '%c'\n", comp->line, comp->src[comp->index]);
                 exit(1);

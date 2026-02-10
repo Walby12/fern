@@ -43,10 +43,15 @@ void parse_expr(Compiler *comp) {
             printf("ERROR at line %zu: Unknow variable: %s\n", comp->line, comp->vals.word);
             exit(1);
           }
+
+          if (found->type != VAR_STRING) {
+            printf("ERROR at line %zu: Expected variable %s to be str but got: %s\n", comp->line, comp->vals.word, var_type_to_string(found->type));
+            exit(1);
+          }
           parse_expect(comp, CLOSE_PAREN);
           ir_print_stmt(comp, comp->vals.word, 0);
         } else if (t != STRING) {
-          printf("ERROR at line %zu: Expected a string or a str var but got: %s\n", comp->line, tok_to_string_case_1(comp, comp->cur_tok));
+          printf("ERROR at line %zu: Expected a string or a str variable but got: %s\n", comp->line, tok_to_string_case_1(comp, comp->cur_tok));
           exit(1);
         } else {
           parse_expect(comp, CLOSE_PAREN);
@@ -57,19 +62,32 @@ void parse_expr(Compiler *comp) {
         char *var_name = strdup(comp->vals.word);
 
         parse_expect(comp, EQUALS);
-        parse_expect(comp, STRING);
-
-        Var *var = malloc(sizeof(Var));
-        var->type = VAR_STRING;
+        Token t = parse_get_next_tok(comp);
+        VarType var_type = VAR_NULL;
+        Var *var = malloc(sizeof(Var));        
+        
+        switch (t) {
+          case STRING:
+            var_type = VAR_STRING;
+            var->as.string = strdup(comp->vals.word);
+            break;
+          case NUMBER:
+            var_type = VAR_NUMBER;
+            var->as.number = comp->vals.number;
+            break;
+          default:
+            printf("TODO\n");
+        }
+        
+        var->type = var_type;
         var->scope_level = 1;
-        var->as.string = strdup(comp->vals.word);
 
         set_var(comp->st, var_name, var);
-        ir_let_stmt(comp, var_name);
+        ir_let_stmt(comp, var_name, var);
         } else {
         printf("ERROR at line %zu: Invalid stmt '%s'\n", comp->line, comp->vals.word);
         exit(1);
-      }
+        }
       parse_expect(comp, SEMICOLON);
       break;
     default:

@@ -1,5 +1,6 @@
 #include "ir_builder.h"
 #include "comp.h"
+#include "vars.h"
 
 #include <stdio.h>
 
@@ -8,6 +9,10 @@ void ir_print_stmt(Compiler *comp, const char *arg, int c) {
     else fprintf(comp->ir_file, "func_call print %s\n", arg);
 }
 
-void ir_let_stmt(Compiler *comp, char *var_name) {
-    fprintf(comp->ir_file, "bind %s \"%s\"\n", var_name, comp->vals.word);
+void ir_let_stmt(Compiler *comp, char *var_name, Var *var) {
+    if (var->type == VAR_STRING) {
+        fprintf(comp->ir_file, "bind %s \"%s\"\n", var_name, comp->vals.word);
+    } else if (var->type == VAR_NUMBER) {
+        fprintf(comp->ir_file, "bind %s %d\n", var_name, comp->vals.number);
+    }
 }
