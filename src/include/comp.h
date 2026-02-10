@@ -12,6 +12,7 @@ typedef struct SymbolTable SymbolTable;
 typedef enum Token {
   IDENT,
   NUMBER,
+  PLUS,
   OPEN_PAREN,
   CLOSE_PAREN,
   SEMICOLON,
@@ -24,7 +25,7 @@ typedef struct Compiler {
   Token cur_tok;
   char *src;
   union {
-    const char *word;
+    char *word;
     int number;
   } vals;
   size_t index;

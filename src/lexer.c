@@ -18,6 +18,10 @@ void lexe(Compiler *comp) {
     }
 
     switch (comp->src[comp->index]) {
+        case '+':
+            comp->cur_tok = PLUS;
+            comp->index++;
+            break;
         case '(':
             comp->cur_tok = OPEN_PAREN;
             comp->index++;

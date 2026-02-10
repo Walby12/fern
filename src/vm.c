@@ -128,12 +128,19 @@ void vm_parse(Vm *vm, SymbolTable *st) {
 
 void vm_parse_func_call(char **cursor, SymbolTable *st) {
     char *arg = vm_get_next_tok(cursor);
-
     if (arg != NULL) {
         if (strcmp(arg, "print") == 0) {
-            vm_parse_print(cursor, st);
+            vm_parse_print_literal(cursor, st, VAR_STRING);
+        } else if (strcmp(arg, "print_num") == 0) {
+            vm_parse_print_literal(cursor, st, VAR_NUMBER);
+        } else if (strcmp(arg, "print_str") == 0) {
+            vm_parse_print_var(cursor, st, VAR_STRING);
+        } else if (strcmp(arg, "print_int") == 0) {
+            vm_parse_print_var(cursor, st, VAR_NUMBER);
+        } else if (strcmp(arg, "print_int_as_str") == 0) {
+            vm_parse_print_int_as_str(cursor, st);
         } else {
-            printf("RUNTIME ERROR: Unknow func_call arg: '%s'\n", arg);
+            printf("RUNTIME ERROR: Unknown func_call arg: '%s'\n", arg);
             exit(1);
         }
     } else {
@@ -142,40 +149,81 @@ void vm_parse_func_call(char **cursor, SymbolTable *st) {
     }
 }
 
-void vm_parse_print(char **cursor, SymbolTable *st) {
+void vm_parse_print_int_as_str(char **cursor, SymbolTable *st) {
     char *arg = vm_get_next_tok(cursor);
-
     if (arg == NULL) {
         printf("RUNTIME ERROR: print expects an arg\n");
         exit(1);
     }
-
+    
     Var *found = get_var(st, arg);
+    if (!found) {
+        printf("RUNTIME ERROR: Could not find var: %s\n", arg);
+        exit(1);
+    }
+    
+    if (found->type != VAR_NUMBER) {
+        printf("RUNTIME ERROR: Type mismatch for var: %s\n", arg);
+        exit(1);
+    }
+    
+    printf("%d", found->as.number);
+}
 
-    if (found) {
-        printf("%s", found->as.string);
-    } else {
+void vm_parse_print_literal(char **cursor, SymbolTable *st, VarType type) {
+    char *arg = vm_get_next_tok(cursor);
+    if (arg == NULL) {
+        printf("RUNTIME ERROR: print expects an arg\n");
+        exit(1);
+    }
+    
+    if (type == VAR_STRING) {
         unescape_str(arg);
+        printf("%s", arg);
+    } else if (type == VAR_NUMBER) {
         printf("%s", arg);
     }
 }
 
-void vm_parse_bind(char **cursor, SymbolTable *st) {
-    char *name = vm_get_next_tok(cursor);
-    char *val = vm_get_next_tok(cursor);
-
-    if (!name || !val) {
-        printf("RUNTIME ERROR: bind must take two args\n");
+void vm_parse_print_var(char **cursor, SymbolTable *st, VarType expected_type) {
+    char *arg = vm_get_next_tok(cursor);
+    if (arg == NULL) {
+        printf("RUNTIME ERROR: print expects an arg\n");
         exit(1);
     }
-
-    unescape_str(val);
     
-    Var *found = get_var(st, name);
-
+    Var *found = get_var(st, arg);
     if (!found) {
-        printf("RUNTIME ERROR: Var %s not found in Symbol Table\n", name);
+        printf("RUNTIME ERROR: Could not find var: %s\n", arg);
         exit(1);
     }
-    found->as.string = strdup(val);
+    
+    if (found->type != expected_type) {
+        printf("RUNTIME ERROR: Type mismatch for var: %s\n", arg);
+        exit(1);
+    }
+    
+    if (expected_type == VAR_STRING) {
+        printf("%s", found->as.string);
+    } else if (expected_type == VAR_NUMBER) {
+        printf("%d", found->as.number);
+    }
+}
+
+void vm_parse_bind(char **cursor, SymbolTable *st) {
+    char *var_name = vm_get_next_tok(cursor);
+    char *value = vm_get_next_tok(cursor);
+        
+    Var *var = malloc(sizeof(Var));
+    var->scope_level = 1;
+    
+    if (value[0] == '"' || (strlen(value) > 0 && !isdigit(value[0]))) {
+        var->type = VAR_STRING;
+        var->as.string = strdup(value);
+    } else {
+        var->type = VAR_NUMBER;
+        var->as.number = atoi(value);
+    }
+    
+    set_var(st, var_name, var);
 }
