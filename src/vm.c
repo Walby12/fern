@@ -130,9 +130,9 @@ void vm_parse_func_call(char **cursor, SymbolTable *st) {
     char *arg = vm_get_next_tok(cursor);
     if (arg != NULL) {
         if (strcmp(arg, "print") == 0) {
-            vm_parse_print_literal(cursor, st, VAR_STRING);
+            vm_parse_print_literal(cursor, VAR_STRING);
         } else if (strcmp(arg, "print_num") == 0) {
-            vm_parse_print_literal(cursor, st, VAR_NUMBER);
+            vm_parse_print_literal(cursor, VAR_NUMBER);
         } else if (strcmp(arg, "print_str") == 0) {
             vm_parse_print_var(cursor, st, VAR_STRING);
         } else if (strcmp(arg, "print_int") == 0) {
@@ -170,7 +170,7 @@ void vm_parse_print_int_as_str(char **cursor, SymbolTable *st) {
     printf("%d", found->as.number);
 }
 
-void vm_parse_print_literal(char **cursor, SymbolTable *st, VarType type) {
+void vm_parse_print_literal(char **cursor, VarType type) {
     char *arg = vm_get_next_tok(cursor);
     if (arg == NULL) {
         printf("RUNTIME ERROR: print expects an arg\n");
